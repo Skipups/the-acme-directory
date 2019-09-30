@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+           body {
+               flex-direction: column;
+               align-content: center;
+               display:flex;
+               align-items: center;
+           }
+           p {
+               color: red;
+               border: solid black .02em;
+           }
+           .box {
+            flex-direction: column;
+            display:flex;
+            border:mediumslateblue;
+           
+           }
+           .rowDiv {
+            flex-direction: row;
+            display:flex;
+
+           }
+           .cell{
+            background-color: pink;
+            border: 1px solid palevioletred;
+            width: 10px;
+            height: 10px;
+           }
+           .clicked {
+               background-color: aqua;
+           }
+           
+
+        </style>
+    </head>
+    <body>
+        <h1>Acme-Grid-Maker!</h1>
+        <input type="number" name="" id="rowInput">
+        <input type="number" name="" id="colInput">
+        <button id="submit">Make a grid</button>
+
+        <div class="box"></div>
+        <div class= 'warning'></div>
+     
+        <script>
+            const row = document.querySelector('#rowInput')
+            const column = document.querySelector('#colInput')
+            const button = document.querySelector('#submit')
+            const box = document.querySelector('.box')
+
+            // eventListener on submit button runs validate function
+            button.addEventListener('click', () => {
+                
+                console.log(row.value, column.value)
+                validate(row.value, column.value)
+            })
+
+            //function to validate input, if not valid, display can't make grid. if valid invoke createGrid function 
+            function validate (r, c){
+                r= parseInt(r,10)
+                c= parseInt(c,10)
+                if ( r <1 || r > 50 || c < 1 || c> 50) {
+                    // display can't Invalig grid message
+                    let warning = document.querySelector('.warning')
+                    let message= document.createElement('p')
+                    message.innerHTML = "Invalid <strong>cordinate</strong> entry"
+                    warning.appendChild(message)
+                    
+                } else createGrid( r, c)
+            }
+
+            // function to create grid
+            function createGrid (rows, columns){
+                //create row container divs
+                for (let r=0; r< rows; r ++){
+                    const rowDiv = document.createElement('div')
+                    rowDiv.classList.add('rowDiv')
+                    //create column cells
+                    for ( let c=0; c< columns; c++){
+                        const cell= document.createElement('div')
+                        cell.classList.add('cell')
+                         //store coordinates of each cell
+                        cell.dataset.row = r;
+                        cell.dataset.column = c;
+                         // listen for a click on a cell, toggle the cell color and display cordinates
+                        cell.addEventListener('click', () => {
+                            displayCord(cell.dataset.row, cell.dataset.column)
+                            cell.classList.toggle('clicked')
+            
+                        })
+                        // add cells to row
+                        rowDiv.appendChild(cell)
+                    }
+                    // add rows to the box
+                    box.appendChild(rowDiv)
+                }
+
+               
+
+                // display cords
+                function displayCord (clickedR, clickedC) {
+                    let warning = document.querySelector('.warning')
+                    let message= document.createElement('p')
+                    message.innerHTML = `Row: ${clickedR}, Column: ${clickedC}`
+                    warning.innerHTML= ""
+                    warning.appendChild(message)
+                   
+                } 
+
+            }
+        </script>
+    </body>
+</html>
+
+
+
+
